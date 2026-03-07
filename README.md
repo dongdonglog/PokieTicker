@@ -1,6 +1,6 @@
 # PokieTicker — Understand the "Why" Behind Every Price Move
 
-**🔗 Live Demo: [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/)**
+**🔗 Live Demo: [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/)** | [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/mitrui)
 
 Since I wanted to understand the stories behind candlestick charts, I vibe coded this app.
 
