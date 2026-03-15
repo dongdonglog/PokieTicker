@@ -2471,12 +2471,11 @@ body {
 /* ===== Responsive — Phone ===== */
 @media (max-width: 480px) {
   .app-main {
-    grid-template-columns: 1fr;
-    grid-template-rows: 35vh 1fr auto;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 35vh 1fr;
     grid-template-areas:
-      "chart"
-      "news"
-      "prediction";
+      "chart      chart"
+      "news       prediction";
   }
   .app-header {
     padding: 2px 6px;
@@ -2509,11 +2508,13 @@ body {
     font-size: 13px;
   }
   .news-area {
-    border-right: none;
-    border-bottom: 1px solid #2a2d3a;
+    border-right: 1px solid #2a2d3a;
+    border-bottom: none;
+    min-height: 0;
   }
   .prediction-area {
-    max-height: 40vh;
+    min-height: 0;
+    overflow-y: auto;
   }
   .news-category-bar {
     grid-template-columns: 1fr 1fr 1fr;
