@@ -72,50 +72,61 @@ Polygon API --> Layer 0 (rule filter) --> Layer 1 (Haiku Batch API) --> Layer 2 
 
 ## Quick Start
 
-### 1. Install dependencies
+The repo includes a pre-built database (`pokieticker.db`) with historical data, so you can run it immediately — **no API keys needed**.
 
 ```bash
-# Backend
+git clone https://github.com/owengetinfo-design/PokieTicker.git
+cd PokieTicker
+
+# Unpack the pre-built database
+gunzip -k pokieticker.db.gz
+
+# Backend (Python 3.10+)
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
-# Frontend
+# Frontend (Node.js 18+)
 cd frontend && npm install && cd ..
 ```
 
-### 2. Configure API keys
-
-```bash
-cp .env.example .env
-```
-
-- **Polygon.io** — free tier at [polygon.io](https://polygon.io/)
-- **Anthropic** — sign up at [console.anthropic.com](https://console.anthropic.com/)
-
-### 3. Initialize database & fetch data
-
-```bash
-# Create tables
-python -m backend.database
-
-# Fetch OHLC + news for tickers (edit bulk_fetch.py to choose tickers)
-python -m backend.bulk_fetch
-
-# Run AI analysis on fetched news
-python -m backend.batch_submit --top 50
-python -m backend.batch_collect <batch_id>
-```
-
-### 4. Run
+Then start both services (in two terminal windows):
 
 ```bash
 # Terminal 1: Backend
+source venv/bin/activate
 uvicorn backend.api.main:app --reload
 
 # Terminal 2: Frontend
 cd frontend && npm run dev
 ```
 
-Open **http://localhost:5173**
+Open **http://localhost:7777/PokieTicker/** and you're done.
+
+> **Just want to see the demo?** Visit [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/) — no setup needed.
+
+### Updating data (optional)
+
+If you want to fetch the latest stock data and run AI analysis, you'll need API keys:
+
+```bash
+cp .env.example .env
+# Edit .env and fill in your keys:
+```
+
+| Key | Where to get it | Cost |
+|-----|-----------------|------|
+| `POLYGON_API_KEY` | [polygon.io](https://polygon.io/) | Free tier |
+| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com/) | Pay-as-you-go |
+
+```bash
+# Fetch new OHLC + news
+python -m backend.bulk_fetch
+
+# Run AI analysis
+python -m backend.batch_submit --top 50
+python -m backend.batch_collect <batch_id>
+```
 
 ## Project Structure
 
