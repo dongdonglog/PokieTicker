@@ -1,212 +1,217 @@
-# PokieTicker — Understand the "Why" Behind Every Price Move
+# PokieTicker
 
-**🔗 Live Demo: [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/)** | [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/mitrui)
+**English | [中文](#中文说明)**
 
-Since I wanted to understand the stories behind candlestick charts, I vibe coded this app.
+PokieTicker is a news-driven stock analysis app built to answer a simple question: why did a stock move?
 
-As a stock market beginner, the news was too fragmented and I was wasting a lot of time, never understanding why prices went up or down. I built PokieTicker to develop **event-driven thinking** — to understand the "why" behind every price move.
+- Overlay news on a candlestick chart
+- Filter by event type and sentiment
+- Ask AI to explain a selected price move
+- Compare similar historical periods
+- Run short-horizon prediction from news + technical features
 
-<!-- Replace YOUR_TWEET_URL with your actual X post URL -->
-[![Watch Demo](docs/demo.gif)](YOUR_TWEET_URL)
+Live demo: [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/)
 
-> Click to watch the full demo video
+[![Demo](docs/demo.gif)](https://mitrui.com/PokieTicker/)
 
-## What It Does
+## Features
 
-- **News on the chart** — Dots on the candlestick chart represent news for each date. Click any dot to see the news impacting that company at the time.
-- **Filter by impact type** — Market, earnings, product, policy, competition, or management. Click a category to see related bullish or bearish news.
-- **Find similar events** — Discover historical days with similar news patterns and see what happened to the stock afterward.
-- **AI explains price moves** — Select a date range and ask AI why the stock dropped or rallied. It tells you what events caused it.
-- **Predict trends** — Based on the past 30 days of news events, the model predicts how these events might affect future price direction.
+- `Chart + news context`: click a date and inspect the related headlines
+- `Range analysis`: ask AI why a stock rallied or dropped over a selected window
+- `Signals and forecast`: view event clusters, short-term direction, and similar periods
+- `Research workflow`: move between chart, news, range analysis, and historical comparisons in one workspace
 
-![screenshot](docs/screenshot.png)
+![Screenshot](docs/screenshot.png)
 
-## How the Prediction Works
+## Stack
 
-PokieTicker includes an XGBoost-based prediction system that combines news sentiment with technical indicators:
-
-**Features (31 total):**
-- **News features** — article count, sentiment score, positive/negative ratio, 3/5/10-day rolling averages, sentiment momentum
-- **Technical features** — price returns (1/3/5/10-day), volatility, volume ratio, RSI-14, moving average crossover
-
-**How it works:**
-1. News articles are scored for sentiment by Claude Haiku (batch API) — each article gets a sentiment label, key discussion summary, and bullish/bearish reasons
-2. These are combined with OHLC price data into daily feature vectors
-3. XGBoost classifiers predict up/down direction at T+1, T+3, and T+5 horizons
-4. The system also finds historically similar periods (cosine similarity on feature vectors) and shows what happened next
-
-**Why news-driven prediction can work:**
-- Stock prices are driven by information. Major news events (earnings, policy changes, product launches) create predictable short-term momentum
-- Sentiment clustering matters — when multiple negative articles cluster on the same day, the downward pressure tends to persist for 1-3 days
-- Historical pattern matching works because markets react similarly to similar events (e.g., tariff announcements, FDA approvals, earnings beats)
-
-> This is an experimental tool for learning, not financial advice. Markets are complex and no model captures everything.
-
-## Architecture
-
-```
-Frontend (React + Vite + D3.js)          Backend (FastAPI + SQLite)
-+---------------------------------+      +----------------------------+
-|  CandlestickChart (D3.js)       |      |  /api/stocks/{sym}/ohlc    |
-|  +- news dots on each date      |----->|  /api/news/{sym}?date=     |
-|  +- crosshair + click to lock   |      |  /api/news/{sym}/categories|
-|                                  |      |                            |
-|  NewsPanel (right sidebar)       |<-----|  SQLite: pokieticker.db    |
-|  +- sentiment sorted             |      |  +- ohlc (51K+ rows)      |
-|  +- up/down reasons              |      |  +- news_raw (61K+)       |
-|  +- T+1/T+5 returns              |      |  +- layer1_results (97K+) |
-|                                  |      |                            |
-|  PredictionPanel                 |<-----|  /api/predict/{sym}/forecast|
-|  +- 7-day & 30-day forecasts     |      |  +- XGBoost models         |
-|  +- similar historical periods   |      |  +- cosine similarity      |
-+---------------------------------+      +----------------------------+
-```
-
-## Data Pipeline
-
-```
-Polygon API --> Layer 0 (rule filter) --> Layer 1 (Haiku Batch API) --> Layer 2 (Sonnet, on-demand)
-  OHLC + News    reject spam/listicles    sentiment + up/down reasons     deep analysis on click
-                  ~17% rejected            50 articles per batch call      cached in DB
-```
+- Frontend: React, TypeScript, Vite, D3.js
+- Backend: FastAPI, SQLite, Pydantic Settings
+- AI: Anthropic Claude for news analysis
+- ML: XGBoost + similarity search
+- Data: Polygon for the current US dataset; A-share support is being added
 
 ## Quick Start
 
-The repo includes a pre-built database (`pokieticker.db`) with historical data, so you can run it immediately — **no API keys needed**.
+The repository includes bundled sample artifacts for quick local startup.
 
 ```bash
-git clone https://github.com/owengetinfo-design/PokieTicker.git
+git clone https://github.com/dongdonglog/PokieTicker.git
 cd PokieTicker
 
-# Unpack the pre-built database and models
-gunzip -k pokieticker.db.gz
+gzip -dkf pokieticker.db.gz
 tar xzf models.tar.gz -C backend/ml/
 
-# Backend (Python 3.10+)
 python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 
-# Frontend (Node.js 18+)
-cd frontend && npm install && cd ..
+cd frontend
+npm install
+npm run dev
 ```
 
-Then start both services (in two terminal windows):
+In another terminal:
 
 ```bash
-# Terminal 1: Backend
 source venv/bin/activate
 uvicorn backend.api.main:app --reload
-
-# Terminal 2: Frontend
-cd frontend && npm run dev
 ```
 
-Open **http://localhost:7777/PokieTicker/** and you're done.
+Frontend: `http://localhost:5173`  
+Backend API: `http://127.0.0.1:8000`
 
-> **Just want to see the demo?** Visit [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/) — no setup needed.
+## Configuration
 
-### Updating data (optional)
+Copy `.env.example` to `.env` and fill in any keys you need:
 
-If you want to fetch the latest stock data and run AI analysis, you'll need API keys:
-
-```bash
-cp .env.example .env
-# Edit .env and fill in your keys:
-```
-
-| Key | Where to get it | Cost |
-|-----|-----------------|------|
-| `POLYGON_API_KEY` | [polygon.io](https://polygon.io/) | Free tier |
-| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com/) | Pay-as-you-go |
-
-```bash
-# Fetch new OHLC + news
-python -m backend.bulk_fetch
-
-# Run AI analysis
-python -m backend.batch_submit --top 50
-python -m backend.batch_collect <batch_id>
-```
+- `POLYGON_API_KEY` for US-market data refresh
+- `ANTHROPIC_API_KEY` for AI analysis
+- `TUSHARE_TOKEN` for the in-progress A-share migration
 
 ## Project Structure
 
-```
-.env                          # API keys (gitignored)
-pokieticker.db                # SQLite database (gitignored)
-requirements.txt              # Python dependencies
-
-backend/
-  config.py                   # pydantic-settings, loads .env
-  database.py                 # 9-table SQLite schema
-  bulk_fetch.py               # Bulk download OHLC + news for many tickers
-  batch_submit.py             # Submit Layer 1 to Anthropic Batch API
-  batch_collect.py            # Collect Batch API results
-  weekly_update.py            # Incremental weekly data update
-  polygon/
-    client.py                 # Polygon API with retry/backoff
-  pipeline/
-    layer0.py                 # Rule-based filter (free)
-    layer1.py                 # Claude Haiku batch analysis
-    layer2.py                 # Sonnet on-demand deep analysis
-    alignment.py              # News -> trading day + forward returns
-    similarity.py             # Similar news pattern matching
-  ml/
-    features.py               # 31-feature engineering (news + technical)
-    model.py                  # XGBoost training (per-ticker + unified)
-    inference.py              # Forecast generation + similar period analysis
-    backtest.py               # Backtesting framework
-    lstm_model.py             # Experimental LSTM model
-  api/
-    main.py                   # FastAPI app + CORS
-    routers/
-      stocks.py               # GET /api/stocks, /search, /{sym}/ohlc
-      news.py                 # GET /api/news/{sym}, /{sym}/timeline
-      analysis.py             # POST /api/analysis/deep, /story
-      pipeline.py             # POST /api/pipeline/fetch, /process
-      predict.py              # GET /api/predict/{sym}/forecast
-
-frontend/
-  src/
-    App.tsx                   # Main layout (chart + panels)
-    components/
-      CandlestickChart.tsx    # D3.js chart with news dots
-      NewsPanel.tsx           # Sentiment-sorted news cards
-      NewsCategoryPanel.tsx   # Filter by impact category
-      PredictionPanel.tsx     # AI forecast + similar periods
-      RangeQueryPopup.tsx     # "Why did it drop?" range analysis
-      SimilarDaysPanel.tsx    # Historical pattern matches
-      StockSelector.tsx       # Ticker search + tabs
+```text
+backend/            FastAPI app, data pipeline, ML, market clients
+frontend/           Vite + React client
+docs/               Demo assets and migration plans
+backend/api/        API entrypoints
+backend/pipeline/   News filtering, alignment, and AI analysis
+backend/ml/         Feature engineering, inference, backtest logic
+backend/ashare/     Early A-share data integration
 ```
 
-## Weekly Update
+## Current Status
+
+- The bundled database is still US-market heavy
+- Frontend UI has been refactored into a cleaner workspace layout
+- A-share migration is in progress
+- A-share news integration planning is documented in:
+  - [docs/ashare-migration-plan.md](docs/ashare-migration-plan.md)
+  - [docs/ashare-news-plan.md](docs/ashare-news-plan.md)
+
+## Development Commands
 
 ```bash
-# Fetch new OHLC + news since last update
+uvicorn backend.api.main:app --reload
+python -m backend.bulk_fetch
 python -m backend.weekly_update
-
-# Run AI analysis on new articles
 python -m backend.batch_submit --top 50
 python -m backend.batch_collect <batch_id>
+
+cd frontend
+npm run dev
+npm run build
+npm run lint
 ```
-
-## Cost Summary
-
-| Item | Cost |
-|------|------|
-| Polygon data (free tier) | $0 |
-| Layer 1 Batch API (per 1000 articles) | ~$0.35 |
-| Layer 2 on-demand (per article) | ~$0.003 |
-| Weekly incremental update | ~$1-2 |
-
-## Tech Stack
-
-- **Frontend**: React, TypeScript, Vite, D3.js
-- **Backend**: FastAPI, SQLite (WAL mode), Pydantic
-- **AI**: Claude Haiku 4.5 (batch sentiment), Claude Sonnet (deep analysis)
-- **ML**: XGBoost (prediction), cosine similarity (pattern matching)
-- **Data**: Polygon.io REST API
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).
+
+---
+
+# 中文说明
+
+PokieTicker 是一个“新闻驱动的股票分析工具”，核心目标不是只看 K 线，而是解释股价为什么涨跌。
+
+- 在 K 线图上叠加新闻事件
+- 按事件类型和情绪筛选新闻
+- 选择区间后让 AI 解释这段走势
+- 查找相似历史阶段
+- 用新闻特征和技术指标做短期方向预测
+
+在线演示： [mitrui.com/PokieTicker](https://mitrui.com/PokieTicker/)
+
+## 功能概览
+
+- `图表 + 新闻上下文`：点击某一天，查看该日期附近的相关新闻
+- `区间分析`：框选一段时间，让 AI 解释为什么上涨或下跌
+- `信号与预测`：查看事件聚集、短期方向和历史相似阶段
+- `研究工作流`：在图表、新闻、区间分析、历史对照之间切换
+
+## 技术栈
+
+- 前端：React、TypeScript、Vite、D3.js
+- 后端：FastAPI、SQLite、Pydantic Settings
+- AI：Anthropic Claude
+- 机器学习：XGBoost + 相似度检索
+- 数据源：当前内置数据以美股为主，A 股接入正在开发中
+
+## 快速启动
+
+仓库内已经包含演示所需的样例数据库和模型文件。
+
+```bash
+git clone https://github.com/dongdonglog/PokieTicker.git
+cd PokieTicker
+
+gzip -dkf pokieticker.db.gz
+tar xzf models.tar.gz -C backend/ml/
+
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+cd frontend
+npm install
+npm run dev
+```
+
+另开一个终端启动后端：
+
+```bash
+source venv/bin/activate
+uvicorn backend.api.main:app --reload
+```
+
+前端地址：`http://localhost:5173`  
+后端接口：`http://127.0.0.1:8000`
+
+## 配置说明
+
+将 `.env.example` 复制为 `.env`，再按需填写：
+
+- `POLYGON_API_KEY`：美股数据更新
+- `ANTHROPIC_API_KEY`：AI 分析
+- `TUSHARE_TOKEN`：A 股迁移开发使用
+
+## 目录结构
+
+```text
+backend/            FastAPI、数据流水线、模型与市场数据接入
+frontend/           Vite + React 前端
+docs/               演示素材与迁移文档
+backend/api/        API 路由
+backend/pipeline/   新闻筛选、对齐和 AI 分析
+backend/ml/         特征工程、推理和回测
+backend/ashare/     A 股接入脚手架
+```
+
+## 当前进度
+
+- 仓库自带数据库目前仍以美股数据为主
+- 前端界面已重构为更清晰的工作区布局
+- A 股迁移正在进行中
+- A 股相关新闻接入方案已单独整理在：
+  - [docs/ashare-migration-plan.md](docs/ashare-migration-plan.md)
+  - [docs/ashare-news-plan.md](docs/ashare-news-plan.md)
+
+## 常用开发命令
+
+```bash
+uvicorn backend.api.main:app --reload
+python -m backend.bulk_fetch
+python -m backend.weekly_update
+python -m backend.batch_submit --top 50
+python -m backend.batch_collect <batch_id>
+
+cd frontend
+npm run dev
+npm run build
+npm run lint
+```
+
+## 许可证
+
+MIT，详见 [LICENSE](LICENSE)。
