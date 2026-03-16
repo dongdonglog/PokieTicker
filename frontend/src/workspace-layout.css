@@ -1,0 +1,353 @@
+/* Layout shell */
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(230, 185, 128, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(92, 126, 172, 0.14), transparent 30%),
+    linear-gradient(180deg, #07111a 0%, #09141f 45%, #0c1722 100%);
+  color: #eef3f7;
+}
+
+.app-shell .app-header {
+  position: relative;
+  z-index: 400;
+  min-height: 76px;
+  padding: 16px 22px;
+  gap: 18px;
+  border-bottom: 1px solid rgba(160, 186, 209, 0.14);
+  background: rgba(6, 16, 26, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.brand-block {
+  min-width: 180px;
+}
+
+.app-shell .app-header h1 {
+  font-size: 24px;
+  letter-spacing: -0.04em;
+}
+
+.brand-tagline {
+  margin-top: 4px;
+  color: #93a8bb;
+  font-size: 13px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.status-chip {
+  padding: 7px 11px;
+  border: 1px solid rgba(157, 185, 211, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f4f7fb;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.status-chip-muted {
+  color: #a9bbca;
+}
+
+.status-positive {
+  color: #61d8a2;
+  border-color: rgba(97, 216, 162, 0.24);
+  background: rgba(97, 216, 162, 0.08);
+}
+
+.status-negative {
+  color: #ff8a84;
+  border-color: rgba(255, 138, 132, 0.22);
+  background: rgba(255, 138, 132, 0.08);
+}
+
+.app-shell .header-link {
+  color: #9eb2c4;
+}
+
+.app-shell .header-link:hover {
+  color: #f4f7fb;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(320px, 420px);
+  gap: 18px;
+  padding: 18px;
+  overflow: hidden;
+}
+
+.chart-column,
+.sidebar-panel {
+  min-height: 0;
+  min-width: 0;
+}
+
+.chart-stage,
+.sidebar-panel {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(157, 185, 211, 0.14);
+  border-radius: 24px;
+  background: rgba(7, 16, 26, 0.78);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.chart-stage {
+  height: 100%;
+}
+
+.chart-topline,
+.sidebar-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid rgba(157, 185, 211, 0.1);
+}
+
+.section-eyebrow {
+  margin-bottom: 6px;
+  color: #84a8c4;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.chart-topline h2,
+.sidebar-header h2 {
+  font-size: 22px;
+  line-height: 1.1;
+  color: #f5f8fb;
+}
+
+.chart-topline-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #9db0c0;
+  font-size: 12px;
+  text-align: right;
+}
+
+.chart-frame {
+  flex: 1;
+  min-height: 0;
+  padding: 0 12px;
+}
+
+.app-shell .chart-container {
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(18, 31, 46, 0.94), rgba(6, 13, 22, 0.94));
+}
+
+.chart-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px 16px;
+  border-top: 1px solid rgba(157, 185, 211, 0.1);
+  color: #9db0c0;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.toolbar-label {
+  color: #f2e1bf;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.toolbar-text,
+.toolbar-metrics {
+  font-size: 12px;
+}
+
+.toolbar-metrics {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  white-space: nowrap;
+}
+
+.app-shell .news-area {
+  border: 1px solid rgba(157, 185, 211, 0.14);
+  background: rgba(7, 16, 26, 0.78);
+}
+
+.sidebar-caption {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #b9c8d5;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.sidebar-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px 0;
+}
+
+.sidebar-tab {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid rgba(157, 185, 211, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #8fa5b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.sidebar-tab:hover {
+  color: #eef4f8;
+  border-color: rgba(210, 175, 123, 0.38);
+}
+
+.sidebar-tab.active {
+  color: #0d1520;
+  border-color: rgba(223, 196, 149, 0.4);
+  background: linear-gradient(135deg, #ecd3a3 0%, #d8b57a 100%);
+}
+
+.sidebar-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 12px 14px 14px;
+}
+
+.insight-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+.insight-note {
+  padding: 12px 14px;
+  border: 1px solid rgba(123, 161, 198, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(26, 44, 63, 0.7), rgba(16, 28, 40, 0.7));
+  color: #adc0d0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.app-shell .chart-placeholder {
+  color: #8fa5b8;
+}
+
+@media (max-width: 1100px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(420px, 58vh) minmax(320px, 1fr);
+  }
+
+  .chart-stage {
+    min-height: 0;
+  }
+
+  .sidebar-panel {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell .app-header {
+    padding: 14px;
+    min-height: auto;
+    flex-wrap: wrap;
+  }
+
+  .brand-block {
+    min-width: 0;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+
+  .header-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-status {
+    width: 100%;
+  }
+
+  .workspace {
+    padding: 12px;
+    gap: 12px;
+    grid-template-rows: minmax(360px, 48vh) minmax(320px, 1fr);
+  }
+
+  .chart-topline,
+  .sidebar-header {
+    padding: 16px 16px 14px;
+    flex-direction: column;
+  }
+
+  .chart-topline h2,
+  .sidebar-header h2 {
+    font-size: 19px;
+  }
+
+  .chart-topline-meta {
+    text-align: left;
+  }
+
+  .chart-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .toolbar-group,
+  .toolbar-metrics {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  .sidebar-tabs {
+    padding: 10px 14px 0;
+  }
+
+  .sidebar-body {
+    padding: 10px 12px 12px;
+  }
+}

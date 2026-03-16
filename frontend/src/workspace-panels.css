@@ -1,0 +1,367 @@
+.app-shell .news-panel,
+.app-shell .pred-panel,
+.app-shell .range-news-panel,
+.app-shell .range-analysis-panel,
+.app-shell .similar-days-panel {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.app-shell .news-panel-header,
+.app-shell .pred-header,
+.app-shell .range-news-header,
+.app-shell .range-analysis-header,
+.app-shell .similar-days-header {
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom-color: rgba(157, 185, 211, 0.1);
+}
+
+.app-shell .news-list {
+  padding: 8px 0 0;
+}
+
+.app-shell .news-card {
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  border-left-width: 3px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.app-shell .news-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.app-shell .news-category-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.app-shell .news-category-bar {
+  padding: 0;
+}
+
+.app-shell .category-tag {
+  min-height: 72px;
+  border-radius: 16px;
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.app-shell .category-tag-active {
+  box-shadow: inset 0 0 0 1px var(--tag-color);
+}
+
+.app-shell .sentiment-sub-bar {
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+  border-bottom: none;
+  background: transparent;
+}
+
+.mode-summary {
+  margin: 12px 18px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(212, 183, 139, 0.18);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(58, 44, 25, 0.34), rgba(15, 24, 34, 0.18));
+}
+
+.mode-summary-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: #f0d19d;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mode-summary p {
+  color: #d3dee7;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.app-shell .news-date-badge,
+.app-shell .range-news-change,
+.app-shell .sim-day-score,
+.app-shell .fc-period-sim {
+  border-radius: 999px;
+}
+
+.app-shell .news-date-badge {
+  background: rgba(92, 126, 172, 0.2);
+  color: #d6e5f0;
+  padding: 6px 10px;
+}
+
+.app-shell .news-count,
+.app-shell .sim-section-label,
+.app-shell .range-section-title,
+.app-shell .range-news-section-title {
+  color: #89a2b6;
+}
+
+.app-shell .news-empty {
+  min-height: 220px;
+  border: 1px dashed rgba(157, 185, 211, 0.12);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #89a2b6;
+}
+
+.app-shell .lock-badge,
+.app-shell .find-similar-btn,
+.app-shell .range-clear-btn,
+.app-shell .range-news-all-btn,
+.app-shell .range-news-ai-btn {
+  border-radius: 999px;
+}
+
+.app-shell .lock-badge {
+  border-color: rgba(113, 201, 255, 0.28);
+  background: rgba(113, 201, 255, 0.08);
+  color: #8dd4ff;
+}
+
+.app-shell .find-similar-btn,
+.app-shell .range-news-all-btn,
+.app-shell .range-clear-btn {
+  border-color: rgba(157, 185, 211, 0.14);
+  color: #a6b8c7;
+}
+
+.app-shell .find-similar-btn:hover,
+.app-shell .range-news-all-btn:hover {
+  color: #f0d19d;
+  border-color: rgba(240, 209, 157, 0.28);
+  background: rgba(240, 209, 157, 0.08);
+}
+
+.app-shell .range-clear-btn:hover {
+  color: #ff8f88;
+  border-color: rgba(255, 143, 136, 0.26);
+  background: rgba(255, 143, 136, 0.08);
+}
+
+.app-shell .news-title,
+.app-shell .sim-day-date {
+  color: #eff4f8;
+}
+
+.app-shell .news-title:hover {
+  color: #f0d19d;
+}
+
+.app-shell .news-summary,
+.app-shell .range-summary,
+.app-shell .sim-day-news-item,
+.app-shell .range-trend {
+  color: #a7b8c6;
+}
+
+.app-shell .news-image-wrap {
+  margin-left: 18px;
+  margin-right: 2px;
+  border-radius: 12px;
+}
+
+.app-shell .news-image {
+  height: 104px;
+  border-radius: 12px;
+}
+
+.app-shell .news-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.app-shell .news-card-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.app-shell .news-sentiment-pill,
+.app-shell .news-source-pill,
+.app-shell .news-time-pill {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.app-shell .news-sentiment-pill {
+  border: 1px solid rgba(157, 185, 211, 0.12);
+}
+
+.app-shell .news-sentiment-pill.positive {
+  color: #61d8a2;
+  border-color: rgba(97, 216, 162, 0.22);
+  background: rgba(97, 216, 162, 0.08);
+}
+
+.app-shell .news-sentiment-pill.negative {
+  color: #ff8a84;
+  border-color: rgba(255, 138, 132, 0.22);
+  background: rgba(255, 138, 132, 0.08);
+}
+
+.app-shell .news-sentiment-pill.neutral {
+  color: #bed0dd;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.app-shell .news-source-pill,
+.app-shell .news-time-pill {
+  color: #93a8bb;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.app-shell .reason-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-shell .reason-label {
+  margin-left: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-shell .reason-label.up {
+  color: #7adab0;
+}
+
+.app-shell .reason-label.down {
+  color: #ff9a94;
+}
+
+.app-shell .news-card-footer,
+.app-shell .sim-day-news {
+  border-top-color: rgba(157, 185, 211, 0.08);
+}
+
+.app-shell .news-publisher,
+.app-shell .ret-chip,
+.app-shell .sim-day-ret-label,
+.app-shell .range-meta,
+.app-shell .range-dates,
+.app-shell .sim-feat-label,
+.app-shell .sim-stat-title {
+  color: #7e94a7;
+}
+
+.app-shell .ret-chip,
+.app-shell .sim-feat-val,
+.app-shell .sim-day-ret,
+.app-shell .range-price,
+.app-shell .range-change {
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .sim-target-card,
+.app-shell .sim-stats-card,
+.app-shell .sim-day-card,
+.app-shell .range-price-card,
+.app-shell .range-section,
+.app-shell .similar-query-card,
+.app-shell .similar-stats-card {
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.app-shell .sim-stats-grid,
+.app-shell .sim-feat-grid {
+  gap: 12px;
+}
+
+.app-shell .sim-stat-block {
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: rgba(5, 11, 19, 0.24);
+}
+
+.app-shell .sim-day-card {
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.app-shell .sim-day-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(240, 209, 157, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.app-shell .range-news-dates {
+  padding-left: 0;
+  padding-right: 0;
+  color: #a7b8c6;
+  border-bottom-color: rgba(157, 185, 211, 0.08);
+}
+
+.app-shell .range-news-ai-btn {
+  background: linear-gradient(135deg, rgba(240, 209, 157, 0.18), rgba(201, 158, 94, 0.14));
+  border-color: rgba(240, 209, 157, 0.24);
+  color: #f7e7c2;
+}
+
+.app-shell .range-news-ai-btn:hover {
+  background: linear-gradient(135deg, rgba(240, 209, 157, 0.24), rgba(201, 158, 94, 0.18));
+  border-color: rgba(240, 209, 157, 0.34);
+}
+
+.app-shell .sentiment-sub-btn {
+  min-height: 42px;
+  border-radius: 999px;
+  border-color: rgba(157, 185, 211, 0.12);
+  color: #9db0c1;
+}
+
+.app-shell .sentiment-sub-active {
+  color: #eef4f8;
+}
+
+.app-shell .range-popup {
+  border-radius: 18px;
+  border-color: rgba(157, 185, 211, 0.16);
+  background: rgba(8, 18, 29, 0.92);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+}
+
+.app-shell .range-popup-preset {
+  border-bottom-color: rgba(157, 185, 211, 0.08);
+  color: #d0deea;
+}
+
+.app-shell .range-popup-preset:hover {
+  background: rgba(240, 209, 157, 0.08);
+}
+
+@media (max-width: 760px) {
+  .mode-summary {
+    margin: 10px 14px 0;
+  }
+
+  .app-shell .news-list {
+    padding-top: 6px;
+  }
+
+  .app-shell .sim-feat-grid,
+  .app-shell .sim-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

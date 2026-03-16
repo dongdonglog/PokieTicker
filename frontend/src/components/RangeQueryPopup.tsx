@@ -17,9 +17,9 @@ interface Props {
 }
 
 const PRESET_QUESTIONS = [
-  "What's driving the price movement?",
-  "Summarize key news in this period",
-  "What are the bull/bear factors?",
+  '这段价格波动是由什么驱动的？',
+  '帮我概括这段时间的关键信闻',
+  '这段区间的利多和利空因素有哪些？',
 ];
 
 export default function RangeQueryPopup({ range, chartRect, onAsk, onClose }: Props) {
@@ -66,7 +66,7 @@ export default function RangeQueryPopup({ range, chartRect, onAsk, onClose }: Pr
         </span>
       </div>
 
-      <div className="range-popup-label">Ask PokieTicker</div>
+      <div className="range-popup-label">向 PokieTicker 提问</div>
 
       {PRESET_QUESTIONS.map((q) => (
         <button
@@ -89,7 +89,7 @@ export default function RangeQueryPopup({ range, chartRect, onAsk, onClose }: Pr
         <input
           ref={inputRef}
           type="text"
-          placeholder="Ask your own question..."
+          placeholder="输入你自己的问题..."
           value={custom}
           onChange={(e) => setCustom(e.target.value)}
         />

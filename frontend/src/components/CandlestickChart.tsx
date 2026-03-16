@@ -605,7 +605,7 @@ export default function CandlestickChart({ symbol, lockedNewsId, highlightedArti
 
   return (
     <div ref={containerRef} className="chart-container">
-      {loading && <div className="chart-loading">Loading...</div>}
+      {loading && <div className="chart-loading">加载图表中...</div>}
       <svg ref={svgRef}></svg>
       <canvas
         ref={canvasRef}

@@ -32,6 +32,18 @@ interface Props {
   highlightedCategoryIds?: string[];
 }
 
+function sentimentLabel(sentiment: string | null) {
+  if (sentiment === 'positive') return '利多';
+  if (sentiment === 'negative') return '利空';
+  return '中性';
+}
+
+function formatPublishedTime(publishedUtc: string) {
+  const date = new Date(publishedUtc);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
 function sortBySentiment(items: NewsItem[]): NewsItem[] {
   const order: Record<string, number> = { positive: 0, negative: 1, neutral: 2 };
   return [...items].sort((a, b) => {
@@ -114,9 +126,9 @@ export default function NewsPanel({ symbol, hoveredDate, onFindSimilar, highligh
     return (
       <div className="news-panel">
         <div className="news-panel-header">
-          <h2>News</h2>
+          <h2>新闻</h2>
         </div>
-        <div className="news-empty">Tap on a chart dot to see news</div>
+        <div className="news-empty">点击图表上的新闻点查看当天新闻</div>
       </div>
     );
   }
@@ -124,32 +136,42 @@ export default function NewsPanel({ symbol, hoveredDate, onFindSimilar, highligh
   return (
     <div className="news-panel">
       <div className="news-panel-header">
-        <h2>News</h2>
+        <h2>新闻</h2>
         <span className="news-date-badge">{displayDate}</span>
-        <span className="news-count">{news.length} articles</span>
+        <span className="news-count">{news.length} 篇</span>
         {isLocked && (
-          <button className="lock-badge" onClick={onUnlock} title="Click to unlock">
-            Locked
+          <button className="lock-badge" onClick={onUnlock} title="点击解锁">
+            已锁定
           </button>
         )}
       </div>
 
       {loading && news.length === 0 ? (
-        <div className="news-empty">Loading...</div>
+        <div className="news-empty">加载中...</div>
       ) : news.length === 0 ? (
-        <div className="news-empty">No news for this date</div>
+        <div className="news-empty">这一天没有相关新闻</div>
       ) : (
         <div className="news-list" ref={listRef}>
           {news.map((item) => {
             const isDimmed = effectiveCategorySet != null && !effectiveCategorySet.has(item.news_id);
+            const timeLabel = formatPublishedTime(item.published_utc);
+            const sentiment = item.sentiment || 'neutral';
             return (
               <div
                 key={item.news_id}
                 data-news-id={item.news_id}
-                className={`news-card ${item.sentiment === 'positive' ? 'card-positive' : item.sentiment === 'negative' ? 'card-negative' : 'card-neutral'}${highlightedNewsId === item.news_id ? ' card-highlighted' : ''}${isDimmed ? ' card-dimmed' : ''}`}
+                className={`news-card ${sentiment === 'positive' ? 'card-positive' : sentiment === 'negative' ? 'card-negative' : 'card-neutral'}${highlightedNewsId === item.news_id ? ' card-highlighted' : ''}${isDimmed ? ' card-dimmed' : ''}`}
               >
+                <div className="news-card-meta">
+                  <div className="news-card-meta-left">
+                    <span className={`sentiment-dot ${sentiment}`} />
+                    <span className={`news-sentiment-pill ${sentiment}`}>{sentimentLabel(item.sentiment)}</span>
+                    <span className="news-source-pill">{item.publisher}</span>
+                  </div>
+                  {timeLabel && <span className="news-time-pill">{timeLabel}</span>}
+                </div>
+
                 <div className="news-card-top">
-                  <span className={`sentiment-dot ${item.sentiment || 'neutral'}`} />
                   <a href={item.article_url} target="_blank" rel="noreferrer" className="news-title">
                     {item.title}
                   </a>
@@ -174,32 +196,37 @@ export default function NewsPanel({ symbol, hoveredDate, onFindSimilar, highligh
                 {(item.reason_growth || item.reason_decrease) && (
                   <div className="news-reasons">
                     {item.reason_growth && (
-                      <div className="reason up">
-                        <span className="reason-icon">+</span> {item.reason_growth}
+                      <div className="reason-group">
+                        <div className="reason-label up">利多逻辑</div>
+                        <div className="reason up">
+                          <span className="reason-icon">+</span> {item.reason_growth}
+                        </div>
                       </div>
                     )}
                     {item.reason_decrease && (
-                      <div className="reason down">
-                        <span className="reason-icon">-</span> {item.reason_decrease}
+                      <div className="reason-group">
+                        <div className="reason-label down">风险点</div>
+                        <div className="reason down">
+                          <span className="reason-icon">-</span> {item.reason_decrease}
+                        </div>
                       </div>
                     )}
                   </div>
                 )}
 
                 <div className="news-card-footer">
-                  <span className="news-publisher">{item.publisher}</span>
                   <div className="returns-chips">
                     <span className="ret-chip">T+1 {pct(item.ret_t1)}</span>
                     <span className="ret-chip">T+5 {pct(item.ret_t5)}</span>
-                    {onFindSimilar && (
-                      <button
-                        className="find-similar-btn"
-                        onClick={(e) => { e.stopPropagation(); onFindSimilar(item.news_id); }}
-                      >
-                        Find Similar
-                      </button>
-                    )}
                   </div>
+                  {onFindSimilar && (
+                    <button
+                      className="find-similar-btn"
+                      onClick={(e) => { e.stopPropagation(); onFindSimilar(item.news_id); }}
+                    >
+                      看相似日
+                    </button>
+                  )}
                 </div>
               </div>
             );

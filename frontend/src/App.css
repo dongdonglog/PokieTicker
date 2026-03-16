@@ -123,6 +123,8 @@ body {
 
 /* ===== Stock Selector ===== */
 .stock-selector {
+  position: relative;
+  z-index: 450;
   display: flex;
   align-items: center;
   gap: 10px;

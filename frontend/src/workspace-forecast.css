@@ -1,0 +1,320 @@
+.app-shell .pred-title,
+.app-shell .fc-section-title {
+  color: #89a2b6;
+}
+
+.app-shell .pred-news-badge,
+.app-shell .fc-period-sim {
+  border-radius: 999px;
+}
+
+.app-shell .pred-panel {
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(17, 28, 40, 0.78), rgba(10, 17, 27, 0.78));
+}
+
+.app-shell .pred-header {
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.app-shell .pred-title {
+  color: #f0d19d;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.app-shell .pred-tabs {
+  margin-left: auto;
+  gap: 6px;
+}
+
+.app-shell .pred-tab {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border-color: rgba(157, 185, 211, 0.14);
+  color: #9fb0bf;
+}
+
+.app-shell .pred-tab.active {
+  background: rgba(92, 126, 172, 0.22);
+  color: #ecf3f8;
+  border-color: rgba(92, 126, 172, 0.32);
+}
+
+.app-shell .pred-details {
+  padding: 8px 0 0;
+}
+
+.forecast-overview-card {
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  border: 1px solid rgba(157, 185, 211, 0.1);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(20, 34, 48, 0.78), rgba(11, 20, 30, 0.78));
+}
+
+.forecast-overview-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.forecast-overview-title {
+  color: #eef5fa;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.forecast-overview-date {
+  color: #8ea4b6;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.forecast-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.forecast-overview-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.forecast-overview-label {
+  color: #89a2b6;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.forecast-overview-value {
+  color: #eef5fa;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.forecast-overview-value.up {
+  color: #61d8a2;
+}
+
+.forecast-overview-value.down {
+  color: #ff8a84;
+}
+
+.app-shell .fc-keywords {
+  gap: 8px;
+}
+
+.app-shell .fc-keyword-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border-color: rgba(157, 185, 211, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: #cad7e1;
+}
+
+.app-shell .fc-section-divider {
+  color: #f2d7a7;
+  border-top-color: rgba(240, 209, 157, 0.14);
+  letter-spacing: 0.1em;
+}
+
+.app-shell .fc-hero {
+  border-radius: 18px;
+  padding: 16px 18px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.app-shell .fc-hero-label {
+  color: #9eb2c2;
+}
+
+.app-shell .fc-hero-conf,
+.app-shell .pred-dir {
+  color: #eef5f9;
+}
+
+.app-shell .fc-impact-title,
+.app-shell .fc-news-title {
+  color: #eff4f8;
+}
+
+.app-shell .fc-impact-summary,
+.app-shell .fc-news-summary,
+.app-shell .fc-deep-discussion,
+.app-shell .fc-bullet-item {
+  color: #a7b8c6;
+}
+
+.app-shell .fc-deep-result {
+  border-top-color: rgba(157, 185, 211, 0.08);
+}
+
+.app-shell .fc-impact-date,
+.app-shell .fc-stat-label,
+.app-shell .fc-period-detail {
+  color: #7e94a7;
+}
+
+.app-shell .fc-stat-value,
+.app-shell .fc-period-dates,
+.app-shell .fc-impact-ret {
+  font-variant-numeric: tabular-nums;
+}
+
+.app-shell .fc-conclusion,
+.app-shell .fc-pred-card,
+.app-shell .fc-similar-stats,
+.app-shell .fc-period-card,
+.app-shell .fc-impact-card {
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.app-shell .fc-predictions {
+  gap: 10px;
+}
+
+.app-shell .fc-pred-card {
+  padding: 12px 14px;
+}
+
+.app-shell .fc-model-badge,
+.app-shell .fc-impact-sentiment.neutral,
+.app-shell .fc-impact-sentiment.unknown {
+  background: rgba(255, 255, 255, 0.06);
+  color: #a9bdcd;
+}
+
+.app-shell .fc-driver-bar-track,
+.app-shell .pred-conf-bar {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-shell .fc-similar-stats {
+  gap: 12px;
+}
+
+.app-shell .fc-stat {
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: rgba(5, 11, 19, 0.24);
+}
+
+.app-shell .fc-period-card {
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.app-shell .fc-period-card:hover,
+.app-shell .fc-impact-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(240, 209, 157, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.forecast-headlines {
+  margin-bottom: 14px;
+}
+
+.forecast-headline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.forecast-headline-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.forecast-headline-copy {
+  min-width: 0;
+}
+
+.forecast-headline-title {
+  color: #eef4f8;
+  font-size: 14px;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.forecast-headline-summary {
+  color: #90a6b8;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.forecast-headline-date {
+  color: #8097aa;
+  font-size: 11px;
+  white-space: nowrap;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+.app-shell .fc-impact-header {
+  margin-bottom: 8px;
+}
+
+.app-shell .fc-impact-sentiment,
+.app-shell .pred-news-badge {
+  border-radius: 999px;
+  padding: 4px 8px;
+}
+
+.app-shell .pred-news-badge {
+  background: rgba(240, 209, 157, 0.08);
+  color: #eed6a7;
+}
+
+.app-shell .fc-deep-btn {
+  padding: 9px 14px;
+  border-style: solid;
+  border-color: rgba(157, 185, 211, 0.14);
+  color: #c8d5df;
+  border-radius: 999px;
+}
+
+.app-shell .fc-deep-btn:hover {
+  border-color: rgba(240, 209, 157, 0.26);
+  background: rgba(240, 209, 157, 0.06);
+  color: #f0d19d;
+}
+
+@media (max-width: 760px) {
+  .app-shell .fc-predictions,
+  .forecast-overview-grid,
+  .app-shell .fc-similar-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-overview-header,
+  .forecast-headline-item {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-overview-date,
+  .forecast-headline-date {
+    white-space: normal;
+  }
+}

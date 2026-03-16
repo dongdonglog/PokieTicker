@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 logger = logging.getLogger(__name__)
 
 from backend.database import get_conn
-from backend.polygon.client import fetch_ohlc, fetch_news, search_tickers
+from backend.ashare.client import fetch_ohlc, fetch_news, normalize_symbol, search_tickers
 
 router = APIRouter()
 
@@ -29,7 +29,7 @@ def list_tickers():
 
 @router.get("/search")
 def search(q: str = Query(..., min_length=1)):
-    """Fuzzy search tickers via Polygon."""
+    """Fuzzy search tickers via the active market data client."""
     # First check local DB
     conn = get_conn()
     local = conn.execute(
@@ -40,7 +40,7 @@ def search(q: str = Query(..., min_length=1)):
 
     results = [dict(r) for r in local]
 
-    # If few local results, also search Polygon
+    # If few local results, also search the remote market data source.
     if len(results) < 5:
         try:
             remote = search_tickers(q, limit=10)
@@ -49,7 +49,7 @@ def search(q: str = Query(..., min_length=1)):
                 if r["symbol"] not in seen:
                     results.append(r)
         except Exception:
-            logger.debug("Polygon search failed for query=%s", q)
+            logger.debug("Remote ticker search failed for query=%s", q)
 
     return results
 
@@ -61,10 +61,11 @@ def get_ohlc(
     end: Optional[str] = None,
 ):
     """Get OHLC data for a symbol."""
+    normalized_symbol = normalize_symbol(symbol)
     conn = get_conn()
 
     query = "SELECT * FROM ohlc WHERE symbol = ?"
-    params: list = [symbol.upper()]
+    params: list = [normalized_symbol]
 
     if start:
         query += " AND date >= ?"
@@ -78,7 +79,7 @@ def get_ohlc(
     conn.close()
 
     if not rows:
-        raise HTTPException(status_code=404, detail=f"No OHLC data for {symbol}")
+        raise HTTPException(status_code=404, detail=f"No OHLC data for {normalized_symbol}")
 
     return [dict(r) for r in rows]
 
@@ -86,7 +87,7 @@ def get_ohlc(
 @router.post("")
 def add_ticker(req: AddTickerRequest, background_tasks: BackgroundTasks):
     """Add a new ticker and trigger background data fetch."""
-    symbol = req.symbol.upper()
+    symbol = normalize_symbol(req.symbol)
     conn = get_conn()
     conn.execute(
         "INSERT OR IGNORE INTO tickers (symbol, name) VALUES (?, ?)",
