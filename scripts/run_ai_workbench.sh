@@ -89,9 +89,23 @@ trap cleanup EXIT INT TERM
 venv/bin/python -m uvicorn backend.api.main:app --reload --host 127.0.0.1 --port 8000 >"$BACKEND_LOG" 2>&1 &
 BACKEND_PID=$!
 
+for _ in $(seq 1 20); do
+  if curl -fsS http://127.0.0.1:8000/api/stocks >/dev/null 2>&1; then
+    break
+  fi
+  sleep 1
+done
+
+if ! curl -fsS http://127.0.0.1:8000/api/stocks >/dev/null 2>&1; then
+  echo "Backend failed to become ready on http://127.0.0.1:8000"
+  echo "Last backend log lines:"
+  tail -n 40 "$BACKEND_LOG" || true
+  exit 1
+fi
+
 echo "Backend starting on http://127.0.0.1:8000"
 echo "Backend log: $BACKEND_LOG"
-echo "Frontend starting on http://127.0.0.1:5173"
+echo "Frontend starting on http://127.0.0.1:7777/PokieTicker/"
 echo "Press Ctrl+C to stop both services"
 
 cd "$ROOT_DIR/frontend"

@@ -63,7 +63,7 @@ interface AppHeaderProps {
 }
 
 interface SidebarProps {
-  selectedSymbol: string;
+  hasContent: boolean;
   isContextMode: boolean;
   sidebarView: SidebarView;
   sidebarTitle: string;
@@ -297,7 +297,7 @@ function AppHeader({
 }
 
 function Sidebar({
-  selectedSymbol,
+  hasContent,
   isContextMode,
   sidebarView,
   sidebarTitle,
@@ -315,7 +315,7 @@ function Sidebar({
         </div>
         <span className="sidebar-caption">{sidebarCaption}</span>
       </div>
-      {!isContextMode && selectedSymbol && (
+      {!isContextMode && hasContent && (
         <div className="sidebar-tabs">
           <button
             className={`sidebar-tab ${sidebarView === 'copilot' ? 'active' : ''}`}
@@ -348,7 +348,7 @@ function Sidebar({
         <p>{modeSummary}</p>
       </div>
       <div className="sidebar-body">
-        {selectedSymbol ? content : <div className="chart-placeholder">先选择股票，再加载右侧内容</div>}
+        {hasContent ? content : <div className="chart-placeholder">先选择股票，再加载右侧内容</div>}
       </div>
     </aside>
   );
@@ -357,6 +357,7 @@ function Sidebar({
 function App() {
   const [activeTickers, setActiveTickers] = useState<string[]>([]);
   const [selectedSymbol, setSelectedSymbol] = useState('');
+  const [loadError, setLoadError] = useState('');
   const {
     state: {
       sidebarView,
@@ -395,15 +396,22 @@ function App() {
     axios
       .get('/api/stocks')
       .then((res) => {
-        const tickers = (res.data as StockItem[])
+        const rawTickers = (res.data as StockItem[]).map((t) => t.symbol);
+        const tickersWithData = (res.data as StockItem[])
           .filter((t) => t.last_ohlc_fetch)
           .map((t) => t.symbol);
+        const tickers = tickersWithData.length > 0 ? tickersWithData : rawTickers;
+
         setActiveTickers(tickers);
+        setLoadError('');
         if (tickers.length > 0 && !selectedSymbol) {
           setSelectedSymbol(tickers[0]);
         }
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error(err);
+        setLoadError('无法连接后端 API。请先启动 127.0.0.1:8000，再刷新页面。');
+      });
   }, []);
 
   // Update chartRect when range is selected (for popup positioning)
@@ -571,7 +579,9 @@ function App() {
               </div>
             </div>
             <div className="chart-frame chart-area" ref={chartAreaRef}>
-              {selectedSymbol ? (
+              {loadError ? (
+                <div className="chart-placeholder">{loadError}</div>
+              ) : selectedSymbol ? (
                 <>
                   <CandlestickChart
                     symbol={selectedSymbol}
@@ -615,14 +625,14 @@ function App() {
           </div>
         </section>
         <Sidebar
-          selectedSymbol={selectedSymbol}
+          hasContent={Boolean(loadError || selectedSymbol)}
           isContextMode={isContextMode}
           sidebarView={sidebarView}
           sidebarTitle={sidebarTitle}
           sidebarCaption={sidebarCaption}
           modeSummary={modeSummary}
           onChangeView={setSidebarView}
-          content={sidebarContent}
+          content={loadError ? <div className="chart-placeholder">{loadError}</div> : sidebarContent}
         />
       </main>
     </div>

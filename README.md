@@ -136,6 +136,13 @@ Later runs:
 ./scripts/run_ai_workbench.sh
 ```
 
+App URLs after startup:
+
+```text
+Frontend: http://127.0.0.1:7777/PokieTicker/
+Backend:  http://127.0.0.1:8000
+```
+
 If you prefer to run the steps manually:
 
 1. Import the sample data:
