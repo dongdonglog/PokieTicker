@@ -351,6 +351,112 @@
   background: rgba(240, 209, 157, 0.08);
 }
 
+.app-shell .ai-copilot-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.app-shell .ai-copilot-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.app-shell .ai-copilot-meta {
+  color: #a7b8c6;
+  font-size: 12px;
+}
+
+.app-shell .ai-copilot-presets {
+  display: grid;
+  gap: 10px;
+}
+
+.app-shell .ai-preset-btn,
+.app-shell .ai-submit-btn {
+  border: 1px solid rgba(157, 185, 211, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  color: #d3dee7;
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: 160ms ease;
+}
+
+.app-shell .ai-preset-btn:hover,
+.app-shell .ai-submit-btn:hover {
+  color: #f0d19d;
+  border-color: rgba(240, 209, 157, 0.28);
+  background: rgba(240, 209, 157, 0.08);
+}
+
+.app-shell .ai-copilot-form {
+  display: grid;
+  gap: 10px;
+}
+
+.app-shell .ai-copilot-form textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 110px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(157, 185, 211, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  color: #eef4f8;
+  outline: none;
+}
+
+.app-shell .ai-copilot-form textarea:focus {
+  border-color: rgba(240, 209, 157, 0.28);
+}
+
+.app-shell .ai-copilot-error {
+  color: #ff8f88;
+  font-size: 13px;
+}
+
+.app-shell .ai-copilot-result {
+  display: grid;
+  gap: 14px;
+  border: 1px solid rgba(157, 185, 211, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px;
+}
+
+.app-shell .ai-result-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: #a7b8c6;
+  font-size: 12px;
+}
+
+.app-shell .ai-answer {
+  margin: 0;
+  color: #eff4f8;
+  line-height: 1.7;
+}
+
+.app-shell .ai-result-block {
+  display: grid;
+  gap: 8px;
+}
+
+.app-shell .ai-result-block h4 {
+  margin: 0;
+  color: #f0d19d;
+  font-size: 13px;
+}
+
+.app-shell .ai-result-block ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #d3dee7;
+}
+
 @media (max-width: 760px) {
   .mode-summary {
     margin: 10px 14px 0;

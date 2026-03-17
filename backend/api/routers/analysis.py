@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
@@ -5,6 +6,7 @@ from typing import Optional
 from backend.pipeline.layer2 import analyze_article, generate_story, analyze_range
 from backend.pipeline.similarity import find_similar
 from backend.database import get_conn
+from backend.llm_client import complete_text
 
 router = APIRouter()
 
@@ -29,6 +31,13 @@ class SimilarRequest(BaseModel):
 
 class StoryRequest(BaseModel):
     symbol: str
+
+
+class CopilotRequest(BaseModel):
+    symbol: str
+    question: str
+    start_date: Optional[str] = None
+    end_date: Optional[str] = None
 
 
 @router.post("/deep")
@@ -78,6 +87,113 @@ def create_story(req: StoryRequest):
     csv_content = "\n".join(lines)
     story_html = generate_story(symbol, csv_content)
     return {"story": story_html}
+
+
+@router.post("/copilot")
+def copilot(req: CopilotRequest):
+    """Ask the AI copilot about a symbol or a selected range."""
+    symbol = req.symbol.upper()
+    conn = get_conn()
+
+    if req.start_date and req.end_date:
+        ohlc_rows = conn.execute(
+            """SELECT date, open, high, low, close, volume
+               FROM ohlc
+               WHERE symbol = ? AND date >= ? AND date <= ?
+               ORDER BY date ASC""",
+            (symbol, req.start_date, req.end_date),
+        ).fetchall()
+    else:
+        ohlc_rows = conn.execute(
+            """SELECT date, open, high, low, close, volume
+               FROM ohlc
+               WHERE symbol = ?
+               ORDER BY date DESC
+               LIMIT 60""",
+            (symbol,),
+        ).fetchall()
+        ohlc_rows = list(reversed(ohlc_rows))
+
+    if not ohlc_rows:
+        conn.close()
+        return {"error": "No OHLC data available for this symbol or range"}
+
+    start_date = req.start_date or ohlc_rows[0]["date"]
+    end_date = req.end_date or ohlc_rows[-1]["date"]
+
+    news_rows = conn.execute(
+        """SELECT nr.title, nr.description, na.trade_date
+           FROM news_aligned na
+           JOIN news_raw nr ON na.news_id = nr.id
+           WHERE na.symbol = ? AND na.trade_date >= ? AND na.trade_date <= ?
+           ORDER BY na.trade_date DESC
+           LIMIT 12""",
+        (symbol, start_date, end_date),
+    ).fetchall()
+    conn.close()
+
+    open_price = ohlc_rows[0]["open"]
+    close_price = ohlc_rows[-1]["close"]
+    high_price = max(r["high"] for r in ohlc_rows)
+    low_price = min(r["low"] for r in ohlc_rows)
+    price_change_pct = round((close_price - open_price) / open_price * 100, 2) if open_price else 0
+    avg_volume = round(sum(r["volume"] for r in ohlc_rows) / len(ohlc_rows), 2) if ohlc_rows else 0
+
+    latest_rows = "\n".join(
+        f"- {row['date']}: O={row['open']}, H={row['high']}, L={row['low']}, C={row['close']}, V={row['volume']}"
+        for row in ohlc_rows[-12:]
+    )
+    news_context = "\n".join(
+        f"- [{row['trade_date']}] {row['title']} | {row['description'] or ''}"
+        for row in news_rows
+    ) or "No linked news found in this period."
+
+    prompt = f"""You are an AI market copilot. Answer in Chinese, concise but useful.
+
+Symbol: {symbol}
+Range: {start_date} to {end_date}
+Trading days: {len(ohlc_rows)}
+Open: {open_price}
+Close: {close_price}
+High: {high_price}
+Low: {low_price}
+Change: {price_change_pct:+.2f}%
+Average volume: {avg_volume}
+
+Recent OHLC rows:
+{latest_rows}
+
+Related news:
+{news_context}
+
+User question:
+{req.question}
+
+Return JSON only:
+{{
+  "answer": "direct answer in Chinese",
+  "key_points": ["point 1", "point 2"],
+  "risk_points": ["risk 1", "risk 2"]
+}}"""
+
+    text = complete_text(user_prompt=prompt, max_tokens=1400, temperature=0.2)
+    try:
+        start_idx = text.find("{")
+        end_idx = text.rfind("}") + 1
+        parsed = json.loads(text[start_idx:end_idx]) if start_idx >= 0 and end_idx > start_idx else {}
+    except json.JSONDecodeError:
+        parsed = {"answer": text, "key_points": [], "risk_points": []}
+
+    return {
+        "symbol": symbol,
+        "start_date": start_date,
+        "end_date": end_date,
+        "price_change_pct": price_change_pct,
+        "news_count": len(news_rows),
+        "answer": parsed.get("answer", ""),
+        "key_points": parsed.get("key_points", []),
+        "risk_points": parsed.get("risk_points", []),
+    }
 
 
 @router.post("/range")

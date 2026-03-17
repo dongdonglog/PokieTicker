@@ -9,6 +9,7 @@ import RangeQueryPopup from './components/RangeQueryPopup';
 import RangeNewsPanel from './components/RangeNewsPanel';
 import SimilarDaysPanel from './components/SimilarDaysPanel';
 import PredictionPanel from './components/PredictionPanel';
+import AICopilotPanel from './components/AICopilotPanel';
 import './App.css';
 import './workspace-layout.css';
 import './workspace-panels.css';
@@ -27,7 +28,7 @@ interface ArticleSelection {
   date: string;
 }
 
-type SidebarView = 'news' | 'signals' | 'forecast';
+type SidebarView = 'copilot' | 'news' | 'signals' | 'forecast';
 
 interface StockItem {
   symbol: string;
@@ -102,7 +103,7 @@ interface WorkspaceActions {
 }
 
 function useWorkspaceState() {
-  const [sidebarView, setSidebarView] = useState<SidebarView>('news');
+  const [sidebarView, setSidebarView] = useState<SidebarView>('copilot');
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
   const [hoveredOhlc, setHoveredOhlc] = useState<HeaderOhlc | null>(null);
   const [selectedRange, setSelectedRange] = useState<RangeSelection | null>(null);
@@ -317,6 +318,12 @@ function Sidebar({
       {!isContextMode && selectedSymbol && (
         <div className="sidebar-tabs">
           <button
+            className={`sidebar-tab ${sidebarView === 'copilot' ? 'active' : ''}`}
+            onClick={() => onChangeView('copilot')}
+          >
+            AI
+          </button>
+          <button
             className={`sidebar-tab ${sidebarView === 'news' ? 'active' : ''}`}
             onClick={() => onChangeView('news')}
           >
@@ -423,6 +430,7 @@ function App() {
     if (selectedRange && rangeQuestion) return '区间分析';
     if (selectedRange) return '区间新闻';
     if (selectedDay) return '相似交易日';
+    if (sidebarView === 'copilot') return 'AI 分析助手';
     if (sidebarView === 'forecast') return '走势预测';
     if (sidebarView === 'signals') return '事件筛选';
     return '新闻上下文';
@@ -440,6 +448,7 @@ function App() {
     if (selectedRange && rangeQuestion) return 'AI 会结合这个区间内的新闻，解释这段走势为什么发生。';
     if (selectedRange) return '先看这段区间里最强的利多和利空新闻，再决定是否继续追问。';
     if (selectedDay) return '把当前这一天和历史上最相似的交易情境做对照。';
+    if (sidebarView === 'copilot') return '直接基于走势和新闻上下文向 AI 提问，不必按固定模板阅读。';
     if (sidebarView === 'forecast') return '查看模型判断、主要驱动因素，以及相似历史区间。';
     if (sidebarView === 'signals') return activeCategoryLabel
       ? `当前按“${activeCategoryLabel}”筛选图表高亮和新闻列表。`
@@ -481,6 +490,10 @@ function App() {
           onClose={clearSelectedDay}
         />
       );
+    }
+
+    if (sidebarView === 'copilot') {
+      return <AICopilotPanel symbol={selectedSymbol} selectedRange={selectedRange} />;
     }
 
     if (sidebarView === 'forecast') {
