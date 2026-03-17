@@ -250,8 +250,8 @@ function AppHeader({
     <header className="app-header">
       <div className="header-left brand-block">
         <div>
-          <h1>PokieTicker</h1>
-          <p className="brand-tagline">把每一次涨跌背后的故事看清楚。</p>
+          <h1>Market Copilot</h1>
+          <p className="brand-tagline">导入任意市场走势，用 AI 直接提问和分析。</p>
         </div>
       </div>
       <div className="header-controls">

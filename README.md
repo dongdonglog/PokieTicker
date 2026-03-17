@@ -1,7 +1,7 @@
 # PokieTicker
 
-> Current branch note: `feature/ai-import-workbench` is a foundation branch.
-> It is runnable for `CSV import + configurable LLM backend`, but it is not yet the full “AI workbench” product.
+> Current branch note: `feature/ai-import-workbench` is an AI-workbench branch.
+> It already changes the product direction to `import data + ask AI`, but the dedicated chat-style frontend is still incomplete.
 
 **English | [中文](#中文说明)**
 
@@ -144,7 +144,8 @@ npm install
 npm run dev
 ```
 
-4. Open the app and inspect the imported symbol if it appears in your local dataset.
+4. Open the app.
+   The header and range prompt in this branch are AI-workbench oriented, and imported symbols are shown under `已导入数据` in the selector when they are not part of the default market groups.
 
 For this branch, the backend/data-layer work is the part that is ready. The dedicated AI-first frontend flow is the next step.
 
@@ -260,7 +261,7 @@ uvicorn backend.api.main:app --reload
 
 ## 当前分支进度
 
-当前分支 `feature/ai-import-workbench` 不是完整成品，而是“AI 工作台基础设施”分支。
+当前分支 `feature/ai-import-workbench` 已经开始把产品改成“AI 工作台”方向，但还不是最终成品。
 
 目前已经能用的部分：
 
@@ -329,7 +330,8 @@ npm install
 npm run dev
 ```
 
-4. 打开页面查看本地库中的 symbol。
+4. 打开页面。
+   这个分支里，页面头部和提问入口已经改成 AI 工作台语义；如果导入了不在默认分组里的 symbol，会显示在 `已导入数据` 分组。
 
 这条分支现在“已经能跑”的重点，是后端导入和 AI 接口适配层；完整的 AI 工作台前端仍是下一步。
 

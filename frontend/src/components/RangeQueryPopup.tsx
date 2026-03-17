@@ -66,7 +66,7 @@ export default function RangeQueryPopup({ range, chartRect, onAsk, onClose }: Pr
         </span>
       </div>
 
-      <div className="range-popup-label">向 PokieTicker 提问</div>
+      <div className="range-popup-label">向 AI 分析助手提问</div>
 
       {PRESET_QUESTIONS.map((q) => (
         <button

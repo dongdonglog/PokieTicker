@@ -205,22 +205,20 @@ export default function StockSelector({ activeTickers, selectedSymbol, onSelect,
   }
 
   const activeSet = new Set(activeTickers);
-  const renderedGroups = Object.entries(GROUPS)
-    .map(([label, tickers]) => ({
-      label,
-      tickers,
-    }));
+  const importedTickers = activeTickers
+    .filter((symbol) => !Object.values(GROUPS).some((group) => group.some((ticker) => ticker.symbol === symbol)))
+    .sort()
+    .map((symbol) => ({ symbol, name: symbol }));
 
-  const assigned = new Set(renderedGroups.flatMap((g) => g.tickers.map((t) => t.symbol)));
-  const ungrouped = activeTickers.filter((s) => !assigned.has(s)).sort();
-  if (ungrouped.length > 0) {
-    const otherGroup = renderedGroups.find((g) => g.label === '其他');
-    if (otherGroup) {
-      otherGroup.tickers.push(...ungrouped.map((symbol) => ({ symbol, name: symbol })));
-    } else {
-      renderedGroups.push({ label: '其他', tickers: ungrouped.map((symbol) => ({ symbol, name: symbol })) });
-    }
-  }
+  const renderedGroups = [
+    ...(importedTickers.length > 0 ? [{ label: '已导入数据', tickers: importedTickers }] : []),
+    ...Object.entries(GROUPS)
+      .map(([label, tickers]) => ({
+        label,
+        tickers: tickers.filter((ticker) => activeSet.has(ticker.symbol)),
+      }))
+      .filter((group) => group.tickers.length > 0),
+  ];
 
   return (
     <div className="stock-selector">
@@ -261,7 +259,7 @@ export default function StockSelector({ activeTickers, selectedSymbol, onSelect,
       <div className="search-wrapper" ref={searchRef}>
         <input
           type="text"
-          placeholder="搜索股票..."
+          placeholder="搜索代码或导入后的 symbol..."
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => results.length > 0 && setShowSearch(true)}
