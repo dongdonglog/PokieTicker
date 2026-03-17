@@ -1,0 +1,6 @@
+symbol,name,sector,date,open,high,low,close,volume
+AAPL,Apple Inc,Technology,2026-03-09,212.30,214.20,210.80,213.75,51234000
+AAPL,Apple Inc,Technology,2026-03-10,213.90,215.10,212.45,214.88,49821000
+AAPL,Apple Inc,Technology,2026-03-11,214.55,216.80,213.95,216.22,53418000
+AAPL,Apple Inc,Technology,2026-03-12,216.10,217.05,214.70,215.34,47652000
+AAPL,Apple Inc,Technology,2026-03-13,215.40,216.90,214.85,216.48,48973000

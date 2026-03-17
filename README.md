@@ -1,5 +1,8 @@
 # PokieTicker
 
+> Current branch note: `feature/ai-import-workbench` is a foundation branch.
+> It is runnable for `CSV import + configurable LLM backend`, but it is not yet the full “AI workbench” product.
+
 **English | [中文](#中文说明)**
 
 PokieTicker is a news-driven stock analysis app built to answer a simple question: why did a stock move?
@@ -71,6 +74,79 @@ Copy `.env.example` to `.env` and fill in any keys you need:
 - `ANTHROPIC_API_KEY` for AI analysis
 - `OPENAI_COMPATIBLE_BASE_URL` / `OPENAI_COMPATIBLE_API_KEY` / `OPENAI_COMPATIBLE_MODEL` for OpenAI-compatible endpoints
 - `TUSHARE_TOKEN` for the in-progress A-share migration
+
+## AI Import Workbench Status
+
+This branch already includes two working building blocks:
+
+1. `OpenAI-compatible LLM support`
+   Interactive AI analysis in `backend/pipeline/layer2.py` can now use either:
+   - `anthropic`
+   - `openai_compatible`
+
+2. `Local OHLC CSV import`
+   You can import arbitrary market data into SQLite with:
+
+```bash
+python -m backend.import_ohlc data/imports/example_aapl.csv
+```
+
+You can also import a whole directory:
+
+```bash
+python -m backend.import_ohlc data/imports/
+```
+
+What is not finished yet:
+
+- frontend “import mode” UI
+- AI-first chat workflow in the page
+- market-agnostic selector flow for imported symbols
+
+## OpenAI-Compatible Setup
+
+If you want to use an OpenAI-compatible endpoint instead of Anthropic:
+
+```env
+AI_PROVIDER=openai_compatible
+OPENAI_COMPATIBLE_BASE_URL=https://your-host/v1
+OPENAI_COMPATIBLE_API_KEY=your_key
+OPENAI_COMPATIBLE_MODEL=gpt-4o-mini
+```
+
+If you want to keep Anthropic:
+
+```env
+AI_PROVIDER=anthropic
+ANTHROPIC_API_KEY=your_key
+ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
+```
+
+## Fastest Demo For This Branch
+
+1. Import the sample data:
+
+```bash
+python -m backend.import_ohlc data/imports/example_aapl.csv
+```
+
+2. Start backend:
+
+```bash
+uvicorn backend.api.main:app --reload
+```
+
+3. Start frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+4. Open the app and inspect the imported symbol if it appears in your local dataset.
+
+For this branch, the backend/data-layer work is the part that is ready. The dedicated AI-first frontend flow is the next step.
 
 ## Project Structure
 
@@ -181,6 +257,81 @@ uvicorn backend.api.main:app --reload
 - `ANTHROPIC_API_KEY`：AI 分析
 - `OPENAI_COMPATIBLE_BASE_URL / API_KEY / MODEL`：兼容 OpenAI 格式的第三方或自建模型接口
 - `TUSHARE_TOKEN`：A 股迁移开发使用
+
+## 当前分支进度
+
+当前分支 `feature/ai-import-workbench` 不是完整成品，而是“AI 工作台基础设施”分支。
+
+目前已经能用的部分：
+
+1. `OpenAI 兼容 API`
+   `backend/pipeline/layer2.py` 已经支持：
+   - `anthropic`
+   - `openai_compatible`
+
+2. `本地 OHLC 导入`
+   已支持把任意市场的 CSV 走势数据导入 SQLite：
+
+```bash
+python -m backend.import_ohlc data/imports/example_aapl.csv
+```
+
+也支持导入整个目录：
+
+```bash
+python -m backend.import_ohlc data/imports/
+```
+
+当前还没完成的部分：
+
+- 前端“导入模式”界面
+- 以 AI 提问为主的页面工作流
+- 面向导入 symbols 的统一选择器体验
+
+## OpenAI 兼容接口配置
+
+如果你想用 OpenAI 兼容格式接口：
+
+```env
+AI_PROVIDER=openai_compatible
+OPENAI_COMPATIBLE_BASE_URL=https://your-host/v1
+OPENAI_COMPATIBLE_API_KEY=your_key
+OPENAI_COMPATIBLE_MODEL=gpt-4o-mini
+```
+
+如果你继续用 Anthropic：
+
+```env
+AI_PROVIDER=anthropic
+ANTHROPIC_API_KEY=your_key
+ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
+```
+
+## 这条分支怎么最快试起来
+
+1. 先导入示例数据：
+
+```bash
+python -m backend.import_ohlc data/imports/example_aapl.csv
+```
+
+2. 启动后端：
+
+```bash
+uvicorn backend.api.main:app --reload
+```
+
+3. 启动前端：
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+4. 打开页面查看本地库中的 symbol。
+
+这条分支现在“已经能跑”的重点，是后端导入和 AI 接口适配层；完整的 AI 工作台前端仍是下一步。
 
 ## 目录结构
 
