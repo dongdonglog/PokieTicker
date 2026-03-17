@@ -457,6 +457,57 @@
   color: #d3dee7;
 }
 
+.app-shell .ai-copilot-empty {
+  padding: 18px 16px;
+  border: 1px dashed rgba(157, 185, 211, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #95aabd;
+}
+
+.app-shell .ai-copilot-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-shell .ai-chat-bubble {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(157, 185, 211, 0.1);
+}
+
+.app-shell .ai-chat-user {
+  background: rgba(60, 108, 176, 0.18);
+  border-color: rgba(96, 144, 212, 0.22);
+}
+
+.app-shell .ai-chat-assistant {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.app-shell .ai-chat-loading {
+  opacity: 0.86;
+}
+
+.app-shell .ai-chat-role,
+.app-shell .ai-chat-meta {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-shell .ai-chat-role {
+  margin-bottom: 8px;
+  color: #f0d19d;
+  font-weight: 700;
+}
+
+.app-shell .ai-chat-meta {
+  margin-top: 10px;
+  color: #8ea4b6;
+}
+
 @media (max-width: 760px) {
   .mode-summary {
     margin: 10px 14px 0;

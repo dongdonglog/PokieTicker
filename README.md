@@ -1,7 +1,7 @@
 # PokieTicker
 
 > Current branch note: `feature/ai-import-workbench` is an AI-workbench branch.
-> It already changes the product direction to `import data + ask AI`, but the dedicated chat-style frontend is still incomplete.
+> It already changes the product direction to `import data + ask AI`, and now includes a first chat-style AI panel.
 
 **English | [中文](#中文说明)**
 
@@ -100,8 +100,8 @@ python -m backend.import_ohlc data/imports/
 What is not finished yet:
 
 - frontend “import mode” UI
-- AI-first chat workflow in the page
-- market-agnostic selector flow for imported symbols
+- imported-symbol-first navigation
+- broader market-specific templates and prompts
 
 ## OpenAI-Compatible Setup
 
@@ -147,7 +147,7 @@ npm run dev
 4. Open the app.
    The header and range prompt in this branch are AI-workbench oriented, and imported symbols are shown under `已导入数据` in the selector when they are not part of the default market groups.
 
-For this branch, the backend/data-layer work is the part that is ready. The dedicated AI-first frontend flow is the next step.
+For this branch, the backend/data-layer work is already usable, and the page now includes a first multi-turn AI chat panel. The dedicated import-first navigation is still the next step.
 
 ## Project Structure
 

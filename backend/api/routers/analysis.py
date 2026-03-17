@@ -6,7 +6,7 @@ from typing import Optional
 from backend.pipeline.layer2 import analyze_article, generate_story, analyze_range
 from backend.pipeline.similarity import find_similar
 from backend.database import get_conn
-from backend.llm_client import complete_text
+from backend.llm_client import complete_messages
 
 router = APIRouter()
 
@@ -38,6 +38,7 @@ class CopilotRequest(BaseModel):
     question: str
     start_date: Optional[str] = None
     end_date: Optional[str] = None
+    history: list[dict[str, str]] = []
 
 
 @router.post("/deep")
@@ -148,7 +149,7 @@ def copilot(req: CopilotRequest):
         for row in news_rows
     ) or "No linked news found in this period."
 
-    prompt = f"""You are an AI market copilot. Answer in Chinese, concise but useful.
+    context_prompt = f"""You are an AI market copilot. Answer in Chinese, concise but useful.
 
 Symbol: {symbol}
 Range: {start_date} to {end_date}
@@ -176,7 +177,15 @@ Return JSON only:
   "risk_points": ["risk 1", "risk 2"]
 }}"""
 
-    text = complete_text(user_prompt=prompt, max_tokens=1400, temperature=0.2)
+    conversation = [{"role": "user", "content": context_prompt}]
+    for item in req.history[-8:]:
+        role = item.get("role", "")
+        content = item.get("content", "")
+        if role in {"user", "assistant"} and content:
+            conversation.append({"role": role, "content": content})
+    conversation.append({"role": "user", "content": req.question})
+
+    text = complete_messages(messages=conversation, max_tokens=1400, temperature=0.2)
     try:
         start_idx = text.find("{")
         end_idx = text.rfind("}") + 1
