@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 logger = logging.getLogger(__name__)
 
 from backend.database import get_conn
-from backend.ashare.client import fetch_ohlc, fetch_news, normalize_symbol, search_tickers
+from backend.market_data import fetch_news, fetch_ohlc, normalize_symbol, provider_name, search_tickers, seed_tickers
 
 router = APIRouter()
 
@@ -24,7 +24,20 @@ def list_tickers():
     conn = get_conn()
     rows = conn.execute("SELECT * FROM tickers ORDER BY symbol").fetchall()
     conn.close()
-    return [dict(r) for r in rows]
+    results = [dict(r) for r in rows]
+    if results:
+        return results
+
+    return [
+        {
+            "symbol": item["symbol"],
+            "name": item["name"],
+            "sector": item.get("sector"),
+            "last_ohlc_fetch": None,
+            "last_news_fetch": None,
+        }
+        for item in seed_tickers()
+    ]
 
 
 @router.get("/search")
@@ -40,7 +53,7 @@ def search(q: str = Query(..., min_length=1)):
 
     results = [dict(r) for r in local]
 
-    # If few local results, also search the remote market data source.
+    # If few local results, ask the configured market data provider.
     if len(results) < 5:
         try:
             remote = search_tickers(q, limit=10)
@@ -49,7 +62,7 @@ def search(q: str = Query(..., min_length=1)):
                 if r["symbol"] not in seen:
                     results.append(r)
         except Exception:
-            logger.debug("Remote ticker search failed for query=%s", q)
+            logger.debug("%s ticker search failed for query=%s", provider_name(), q)
 
     return results
 
@@ -88,10 +101,15 @@ def get_ohlc(
 def add_ticker(req: AddTickerRequest, background_tasks: BackgroundTasks):
     """Add a new ticker and trigger background data fetch."""
     symbol = normalize_symbol(req.symbol)
+    metadata = next((item for item in search_tickers(symbol, limit=20) if item["symbol"] == symbol), None)
     conn = get_conn()
     conn.execute(
-        "INSERT OR IGNORE INTO tickers (symbol, name) VALUES (?, ?)",
-        (symbol, req.name or symbol),
+        "INSERT OR IGNORE INTO tickers (symbol, name, sector) VALUES (?, ?, ?)",
+        (
+            symbol,
+            req.name or (metadata["name"] if metadata else symbol),
+            metadata.get("sector") if metadata else None,
+        ),
     )
     conn.commit()
     conn.close()

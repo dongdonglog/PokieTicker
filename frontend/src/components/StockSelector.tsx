@@ -7,6 +7,11 @@ interface Ticker {
   sector?: string;
 }
 
+interface GroupTicker {
+  symbol: string;
+  name: string;
+}
+
 interface Props {
   activeTickers: string[];
   selectedSymbol: string;
@@ -14,19 +19,138 @@ interface Props {
   onAdd: (symbol: string) => void;
 }
 
-const GROUPS: Record<string, string[]> = {
-  '科技': ['AAPL', 'MSFT', 'GOOGL', 'GOOG', 'META', 'AMZN', 'CRM', 'ORCL', 'IBM', 'CSCO', 'NOW', 'WDAY', 'SNOW', 'DELL', 'ADBE'],
-  'AI / 芯片': ['NVDA', 'AMD', 'TSM', 'AVGO', 'INTC', 'QCOM', 'ARM', 'AMAT', 'LRCX', 'MU', 'MRVL', 'SMCI', 'CRWV', 'TXN', 'ASML'],
-  'AI 软件': ['AI', 'SOUN', 'SOUNW', 'CRWD', 'ANET', 'IDCC'],
-  '新能源车': ['TSLA', 'RIVN', 'LCID', 'NIO', 'LI', 'BYDDY', 'F', 'GM', 'STLA', 'TM'],
-  '中概股': ['BABA', 'JD', 'BIDU', 'NIO', 'LI', 'BILI', 'NTES', 'SE', 'MCHI', 'FXI'],
-  '金融': ['V', 'MA', 'GS', 'MS', 'BAC', 'WFC', 'C', 'BLK', 'COIN', 'HOOD', 'MARA'],
-  '媒体': ['NFLX', 'DIS', 'ROKU', 'WBD', 'ZM'],
-  '消费': ['COST', 'WMT', 'HD', 'TGT', 'NKE', 'SBUX', 'MCD', 'CMG', 'KO', 'EBAY', 'MELI'],
-  '医疗': ['UNH', 'JNJ', 'LLY', 'MRNA', 'NVO'],
-  '能源': ['XOM', 'CVX', 'OXY', 'XLE', 'USO'],
-  '通信': ['T', 'VZ'],
-  '其他': ['BA', 'UBER', 'GME', 'AMC', 'MULN', 'SQ', 'FB', 'AMJB', 'GLD', 'XLU', 'XLY', 'DIDI'],
+const GROUPS: Record<string, GroupTicker[]> = {
+  '科技': [
+    { symbol: 'AAPL', name: 'Apple' },
+    { symbol: 'MSFT', name: 'Microsoft' },
+    { symbol: 'GOOGL', name: 'Alphabet' },
+    { symbol: 'GOOG', name: 'Alphabet C' },
+    { symbol: 'META', name: 'Meta' },
+    { symbol: 'AMZN', name: 'Amazon' },
+    { symbol: 'CRM', name: 'Salesforce' },
+    { symbol: 'ORCL', name: 'Oracle' },
+    { symbol: 'IBM', name: 'IBM' },
+    { symbol: 'CSCO', name: 'Cisco' },
+    { symbol: 'NOW', name: 'ServiceNow' },
+    { symbol: 'WDAY', name: 'Workday' },
+    { symbol: 'SNOW', name: 'Snowflake' },
+    { symbol: 'DELL', name: 'Dell' },
+    { symbol: 'ADBE', name: 'Adobe' },
+  ],
+  'AI / 芯片': [
+    { symbol: 'NVDA', name: 'NVIDIA' },
+    { symbol: 'AMD', name: 'AMD' },
+    { symbol: 'TSM', name: 'TSMC ADR' },
+    { symbol: 'AVGO', name: 'Broadcom' },
+    { symbol: 'INTC', name: 'Intel' },
+    { symbol: 'QCOM', name: 'Qualcomm' },
+    { symbol: 'ARM', name: 'Arm' },
+    { symbol: 'AMAT', name: 'Applied Materials' },
+    { symbol: 'LRCX', name: 'Lam Research' },
+    { symbol: 'MU', name: 'Micron' },
+    { symbol: 'MRVL', name: 'Marvell' },
+    { symbol: 'SMCI', name: 'Supermicro' },
+    { symbol: 'CRWV', name: 'CoreWeave' },
+    { symbol: 'TXN', name: 'Texas Instruments' },
+    { symbol: 'ASML', name: 'ASML' },
+  ],
+  'AI 软件': [
+    { symbol: 'AI', name: 'C3.ai' },
+    { symbol: 'SOUN', name: 'SoundHound' },
+    { symbol: 'SOUNW', name: 'SoundHound Warrants' },
+    { symbol: 'CRWD', name: 'CrowdStrike' },
+    { symbol: 'ANET', name: 'Arista' },
+    { symbol: 'IDCC', name: 'InterDigital' },
+  ],
+  '新能源车': [
+    { symbol: 'TSLA', name: 'Tesla' },
+    { symbol: 'RIVN', name: 'Rivian' },
+    { symbol: 'LCID', name: 'Lucid' },
+    { symbol: 'NIO', name: 'NIO' },
+    { symbol: 'LI', name: 'Li Auto' },
+    { symbol: 'BYDDY', name: 'BYD ADR' },
+    { symbol: 'F', name: 'Ford' },
+    { symbol: 'GM', name: 'GM' },
+    { symbol: 'STLA', name: 'Stellantis' },
+    { symbol: 'TM', name: 'Toyota' },
+  ],
+  '中概股': [
+    { symbol: 'BABA', name: 'Alibaba' },
+    { symbol: 'JD', name: 'JD.com' },
+    { symbol: 'BIDU', name: 'Baidu' },
+    { symbol: 'NIO', name: 'NIO' },
+    { symbol: 'LI', name: 'Li Auto' },
+    { symbol: 'BILI', name: 'Bilibili' },
+    { symbol: 'NTES', name: 'NetEase' },
+    { symbol: 'SE', name: 'Sea' },
+    { symbol: 'MCHI', name: 'iShares China' },
+    { symbol: 'FXI', name: 'China Large-Cap ETF' },
+  ],
+  '金融': [
+    { symbol: 'V', name: 'Visa' },
+    { symbol: 'MA', name: 'Mastercard' },
+    { symbol: 'GS', name: 'Goldman Sachs' },
+    { symbol: 'MS', name: 'Morgan Stanley' },
+    { symbol: 'BAC', name: 'Bank of America' },
+    { symbol: 'WFC', name: 'Wells Fargo' },
+    { symbol: 'C', name: 'Citigroup' },
+    { symbol: 'BLK', name: 'BlackRock' },
+    { symbol: 'COIN', name: 'Coinbase' },
+    { symbol: 'HOOD', name: 'Robinhood' },
+    { symbol: 'MARA', name: 'Marathon Digital' },
+  ],
+  '媒体': [
+    { symbol: 'NFLX', name: 'Netflix' },
+    { symbol: 'DIS', name: 'Disney' },
+    { symbol: 'ROKU', name: 'Roku' },
+    { symbol: 'WBD', name: 'Warner Bros. Discovery' },
+    { symbol: 'ZM', name: 'Zoom' },
+  ],
+  '消费': [
+    { symbol: 'COST', name: 'Costco' },
+    { symbol: 'WMT', name: 'Walmart' },
+    { symbol: 'HD', name: 'Home Depot' },
+    { symbol: 'TGT', name: 'Target' },
+    { symbol: 'NKE', name: 'Nike' },
+    { symbol: 'SBUX', name: 'Starbucks' },
+    { symbol: 'MCD', name: 'McDonald\'s' },
+    { symbol: 'CMG', name: 'Chipotle' },
+    { symbol: 'KO', name: 'Coca-Cola' },
+    { symbol: 'EBAY', name: 'eBay' },
+    { symbol: 'MELI', name: 'Mercado Libre' },
+  ],
+  '医疗': [
+    { symbol: 'UNH', name: 'UnitedHealth' },
+    { symbol: 'JNJ', name: 'Johnson & Johnson' },
+    { symbol: 'LLY', name: 'Eli Lilly' },
+    { symbol: 'MRNA', name: 'Moderna' },
+    { symbol: 'NVO', name: 'Novo Nordisk' },
+  ],
+  '能源': [
+    { symbol: 'XOM', name: 'ExxonMobil' },
+    { symbol: 'CVX', name: 'Chevron' },
+    { symbol: 'OXY', name: 'Occidental' },
+    { symbol: 'XLE', name: 'Energy ETF' },
+    { symbol: 'USO', name: 'Oil Fund' },
+  ],
+  '通信': [
+    { symbol: 'T', name: 'AT&T' },
+    { symbol: 'VZ', name: 'Verizon' },
+  ],
+  '其他': [
+    { symbol: 'BA', name: 'Boeing' },
+    { symbol: 'UBER', name: 'Uber' },
+    { symbol: 'GME', name: 'GameStop' },
+    { symbol: 'AMC', name: 'AMC' },
+    { symbol: 'MULN', name: 'Mullen' },
+    { symbol: 'SQ', name: 'Block' },
+    { symbol: 'FB', name: 'Meta Legacy' },
+    { symbol: 'AMJB', name: 'Alerian MLP ETN' },
+    { symbol: 'GLD', name: 'Gold ETF' },
+    { symbol: 'XLU', name: 'Utilities ETF' },
+    { symbol: 'XLY', name: 'Consumer ETF' },
+    { symbol: 'DIDI', name: 'DiDi' },
+  ],
 };
 
 export default function StockSelector({ activeTickers, selectedSymbol, onSelect, onAdd }: Props) {
@@ -80,28 +204,21 @@ export default function StockSelector({ activeTickers, selectedSymbol, onSelect,
     onSelect(ticker.symbol);
   }
 
-  function handleSelectTicker(sym: string) {
-    setShowPanel(false);
-    onSelect(sym);
-  }
-
-  // Build groups filtered to only tickers that exist in our data
   const activeSet = new Set(activeTickers);
   const renderedGroups = Object.entries(GROUPS)
-    .map(([label, symbols]) => ({
+    .map(([label, tickers]) => ({
       label,
-      symbols: symbols.filter((s) => activeSet.has(s)),
-    }))
-    .filter((g) => g.symbols.length > 0);
+      tickers,
+    }));
 
-  const assigned = new Set(renderedGroups.flatMap((g) => g.symbols));
+  const assigned = new Set(renderedGroups.flatMap((g) => g.tickers.map((t) => t.symbol)));
   const ungrouped = activeTickers.filter((s) => !assigned.has(s)).sort();
   if (ungrouped.length > 0) {
     const otherGroup = renderedGroups.find((g) => g.label === '其他');
     if (otherGroup) {
-      otherGroup.symbols.push(...ungrouped);
+      otherGroup.tickers.push(...ungrouped.map((symbol) => ({ symbol, name: symbol })));
     } else {
-      renderedGroups.push({ label: '其他', symbols: ungrouped });
+      renderedGroups.push({ label: '其他', tickers: ungrouped.map((symbol) => ({ symbol, name: symbol })) });
     }
   }
 
@@ -123,13 +240,14 @@ export default function StockSelector({ activeTickers, selectedSymbol, onSelect,
               <div className="ticker-panel-group" key={group.label}>
                 <div className="ticker-panel-group-label">{group.label}</div>
                 <div className="ticker-panel-group-items">
-                  {group.symbols.map((sym) => (
+                  {group.tickers.map((ticker) => (
                     <button
-                      key={sym}
-                      className={`ticker-panel-item ${sym === selectedSymbol ? 'active' : ''}`}
-                      onClick={() => handleSelectTicker(sym)}
+                      key={ticker.symbol}
+                      className={`ticker-panel-item ${ticker.symbol === selectedSymbol ? 'active' : ''}`}
+                      onClick={() => handlePick({ symbol: ticker.symbol, name: ticker.name })}
+                      title={ticker.name}
                     >
-                      {sym}
+                      {ticker.symbol}
                     </button>
                   ))}
                 </div>
@@ -152,7 +270,7 @@ export default function StockSelector({ activeTickers, selectedSymbol, onSelect,
           <ul className="search-dropdown">
             {results.map((t) => (
               <li key={t.symbol} onClick={() => handlePick(t)}>
-                <strong>{t.symbol}</strong> <span>{t.name}</span>
+                <strong>{t.name}</strong> <span>{t.symbol}</span>
               </li>
             ))}
           </ul>

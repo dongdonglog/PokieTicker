@@ -12,7 +12,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 from backend.database import get_conn
-from backend.ashare.client import fetch_ohlc, fetch_news
+from backend.market_data import fetch_ohlc, fetch_news
 from backend.pipeline.alignment import align_news_for_symbol
 from backend.pipeline.layer0 import run_layer0
 

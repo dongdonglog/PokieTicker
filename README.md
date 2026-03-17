@@ -65,6 +65,7 @@ Backend API: `http://127.0.0.1:8000`
 
 Copy `.env.example` to `.env` and fill in any keys you need:
 
+- `MARKET_DATA_PROVIDER` selects the active data backend. Default: `polygon`
 - `POLYGON_API_KEY` for US-market data refresh
 - `ANTHROPIC_API_KEY` for AI analysis
 - `TUSHARE_TOKEN` for the in-progress A-share migration
@@ -172,6 +173,7 @@ uvicorn backend.api.main:app --reload
 
 将 `.env.example` 复制为 `.env`，再按需填写：
 
+- `MARKET_DATA_PROVIDER`：当前启用的数据提供方，默认 `polygon`
 - `POLYGON_API_KEY`：美股数据更新
 - `ANTHROPIC_API_KEY`：AI 分析
 - `TUSHARE_TOKEN`：A 股迁移开发使用

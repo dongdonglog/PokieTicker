@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 logger = logging.getLogger(__name__)
 
 from backend.database import get_conn
-from backend.polygon.client import fetch_ohlc, fetch_news
+from backend.market_data import fetch_ohlc, fetch_news
 from backend.pipeline.layer0 import run_layer0
 from backend.pipeline.layer1 import get_pending_articles, run_layer1, check_batch_status, collect_batch_results
 from backend.pipeline.alignment import align_news_for_symbol
