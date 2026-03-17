@@ -124,6 +124,20 @@ ANTHROPIC_MODEL=claude-sonnet-4-5-20250929
 
 ## Fastest Demo For This Branch
 
+First run:
+
+```bash
+./scripts/run_ai_workbench.sh --bootstrap --import-sample
+```
+
+Later runs:
+
+```bash
+./scripts/run_ai_workbench.sh
+```
+
+If you prefer to run the steps manually:
+
 1. Import the sample data:
 
 ```bash
