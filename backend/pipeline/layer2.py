@@ -8,12 +8,8 @@ import json
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timezone
 
-import anthropic
-
-from backend.config import settings
 from backend.database import get_conn
-
-MODEL = "claude-sonnet-4-5-20250929"
+from backend.llm_client import complete_text
 
 
 def get_cached(news_id: str, symbol: str) -> Optional[Dict[str, Any]]:
@@ -46,8 +42,6 @@ def analyze_article(news_id: str, symbol: str) -> Dict[str, Any]:
     if not article:
         return {"error": "Article not found"}
 
-    client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-
     prompt = f"""You are a senior financial analyst. Provide a deep analysis of this news article's impact on {symbol} stock.
 
 TITLE: {article['title']}
@@ -63,13 +57,11 @@ Provide your analysis as JSON:
 
 Respond with JSON only."""
 
-    message = client.messages.create(
-        model=MODEL,
+    text = complete_text(
+        user_prompt=prompt,
         max_tokens=1024,
-        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
     )
-
-    text = message.content[0].text if message.content else ""
     try:
         start = text.find("{")
         end = text.rfind("}") + 1
@@ -106,15 +98,8 @@ Respond with JSON only."""
 
 def generate_story(symbol: str, csv_content: str) -> str:
     """Generate an AI story about stock price movements. Port from app.py."""
-    client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-
-    message = client.messages.create(
-        model=MODEL,
-        max_tokens=4096,
-        messages=[
-            {
-                "role": "user",
-                "content": f"""Below is {symbol}'s OHLC data and related news. Please generate a compelling investment story based on this data.
+    return complete_text(
+        user_prompt=f"""Below is {symbol}'s OHLC data and related news. Please generate a compelling investment story based on this data.
 
 Data:
 ```
@@ -133,11 +118,9 @@ Write in English, approximately 500-1000 words, with vivid and narrative languag
 - Impact of key news events
 - Comparisons with competitors
 - Regulatory environment and policy impacts""",
-            }
-        ],
+        max_tokens=4096,
+        temperature=0.3,
     )
-
-    return message.content[0].text if message.content else ""
 
 
 def analyze_range(symbol: str, start_date: str, end_date: str, question: Optional[str] = None) -> Dict[str, Any]:
@@ -191,8 +174,6 @@ def analyze_range(symbol: str, start_date: str, end_date: str, question: Optiona
     # Build OHLC summary
     ohlc_summary = f"Open: ${open_price:.2f}, Close: ${close_price:.2f}, High: ${high_price:.2f}, Low: ${low_price:.2f}, Change: {price_change_pct:+.2f}%, Trading days: {len(ohlc_rows)}"
 
-    client = anthropic.Anthropic(api_key=settings.anthropic_api_key)
-
     question_part = f"The user's specific question is: {question}. Please focus on answering this question in your analysis.\n\n" if question else ""
 
     prompt = f"""You are a senior financial analyst. Please analyze {symbol}'s stock price movement from {start_date} to {end_date}.
@@ -214,13 +195,11 @@ Related news during this period ({news_count} articles):
 
 Return JSON only."""
 
-    message = client.messages.create(
-        model=MODEL,
+    text = complete_text(
+        user_prompt=prompt,
         max_tokens=2048,
-        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
     )
-
-    text = message.content[0].text if message.content else ""
     try:
         start_idx = text.find("{")
         end_idx = text.rfind("}") + 1

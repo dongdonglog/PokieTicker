@@ -66,8 +66,10 @@ Backend API: `http://127.0.0.1:8000`
 Copy `.env.example` to `.env` and fill in any keys you need:
 
 - `MARKET_DATA_PROVIDER` selects the active data backend. Default: `polygon`
+- `AI_PROVIDER` selects the active LLM backend. Default: `anthropic`
 - `POLYGON_API_KEY` for US-market data refresh
 - `ANTHROPIC_API_KEY` for AI analysis
+- `OPENAI_COMPATIBLE_BASE_URL` / `OPENAI_COMPATIBLE_API_KEY` / `OPENAI_COMPATIBLE_MODEL` for OpenAI-compatible endpoints
 - `TUSHARE_TOKEN` for the in-progress A-share migration
 
 ## Project Structure
@@ -174,8 +176,10 @@ uvicorn backend.api.main:app --reload
 将 `.env.example` 复制为 `.env`，再按需填写：
 
 - `MARKET_DATA_PROVIDER`：当前启用的数据提供方，默认 `polygon`
+- `AI_PROVIDER`：当前启用的大模型提供方，默认 `anthropic`
 - `POLYGON_API_KEY`：美股数据更新
 - `ANTHROPIC_API_KEY`：AI 分析
+- `OPENAI_COMPATIBLE_BASE_URL / API_KEY / MODEL`：兼容 OpenAI 格式的第三方或自建模型接口
 - `TUSHARE_TOKEN`：A 股迁移开发使用
 
 ## 目录结构
